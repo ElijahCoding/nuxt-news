@@ -11,9 +11,16 @@
             <div class="md-toolbar-section-end">
               <md-button to="/login">Login</md-button>
               <md-button to="/register">Register</md-button>
-              <md-button class="md-accent">Categories</md-button>
+              <md-button class="md-accent" @click="showRightSidepanel = true">Categories</md-button>
             </div>
         </md-toolbar>
+
+        <!-- News Categories (Right Drawer) -->
+    <md-drawer class="md-right" md-fixed :md-active.sync="showRightSidepanel">
+        <md-toolbar :md-elevation="1">
+            <span class="md-title">News Categories</span>
+        </md-toolbar>
+    </md-drawer>
 
         <!-- App Content -->
         <div class="md-layout-item md-size-95">
@@ -68,7 +75,17 @@
     export default {
         data () {
             return {
-
+                showLeftSidepanel: false,
+                showRightSidepanel: false,
+                newsCategories: [
+                    { name: "Top Headlines", path: "", icon: "today" },
+                    { name: "Technology", path: "technology", icon: "keyboard" },
+                    { name: "Business", path: "business", icon: "business_center" },
+                    { name: "Entertainment", path: "entertainment", icon: "weekend" },
+                    { name: "Health", path: "health", icon: "fastfood" },
+                    { name: "Science", path: "science", icon: "fingerprint" },
+                    { name: "Sports", path: "sports", icon: "golf_course" }
+                ]
             }
         },
 
