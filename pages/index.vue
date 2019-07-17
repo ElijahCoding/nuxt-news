@@ -20,6 +20,15 @@
         <md-toolbar :md-elevation="1">
             <span class="md-title">News Categories</span>
         </md-toolbar>
+
+        <md-list>
+            <md-subheader class="md-primary">Categories</md-subheader>
+
+            <md-list-item v-for="(newsCategory, i) in newsCategories" :key="i" @click="loadCategory(newsCategory.path)">
+                <md-icon>{{newsCategory.icon}}</md-icon>
+                <span class="md-list-item-text">{{newsCategory.name}}</span>
+            </md-list-item>
+        </md-list>
     </md-drawer>
 
         <!-- App Content -->
@@ -97,9 +106,20 @@
         },
 
         computed: {
-            headlines() {
+            headlines () {
                 return this.$store.getters.headlines;
             },
+
+            category () {
+                return this.$store.getters.category;
+            }
+        },
+
+        methods: {
+            async loadCategory (category) {
+                this.$store.commit("setCategory", category);
+                
+            }
         }
     }
 </script>

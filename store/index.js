@@ -4,7 +4,9 @@ const createStore = () => {
     return new Vuex.Store({
         state: {
             headlines: [],
-            loading: false
+            loading: false,
+            category: '',
+            country: 'us'
         },
 
         mutations: {
@@ -15,6 +17,14 @@ const createStore = () => {
             setLoading(state, loading) {
                 state.loading = loading;
             },
+
+            setCategory (state, category) {
+                state.category = category;
+            },
+
+            setCountry(state, country) {
+                state.country = country;
+            }
         },
 
         actions: {
@@ -29,6 +39,7 @@ const createStore = () => {
         getters: {
             headlines: state => state.headlines,
             loading: state => state.loading,
+            category: state => state.category,
         },
     })
 }
