@@ -1,7 +1,7 @@
 <template>
     <div class="md-layout md-alignment-center" style="margin: 4em 0">
         <md-toolbar class="fixed-toolbar" elevation="1">
-            <md-button class="md-icon-button">
+            <md-button @click="showLeftSidepanel = true" class="md-icon-button">
               <md-icon>menu</md-icon>
             </md-button>
             <nuxt-link class="md-primary md-title" to="/">
@@ -15,23 +15,42 @@
             </div>
         </md-toolbar>
 
+        <!-- Personal News Feed (Left Drawer) -->
+        <md-drawer md-fixed :md-active.sync="showLeftSidepanel">
+            <md-toolbar md-elevation="1">
+                <span class="md-title">Personal Feed</span>
+            </md-toolbar>
+
+            <md-progress-bar v-if="loading" md-mode="indeterminate"></md-progress-bar>
+
+            <md-field>
+                <label for="country">Country</label>
+                <md-select @input="changeCountry" :value="country" name="country" id="country">
+                    <md-option value="us">United States</md-option>
+                    <md-option value="ca">Canada</md-option>
+                    <md-option value="de">Germany</md-option>
+                    <md-option value="ru">Russia</md-option>
+                </md-select>
+            </md-field>
+        </md-drawer>
+
         <!-- News Categories (Right Drawer) -->
-    <md-drawer class="md-right" md-fixed :md-active.sync="showRightSidepanel">
-        <md-toolbar :md-elevation="1">
-            <span class="md-title">News Categories</span>
-        </md-toolbar>
+        <md-drawer class="md-right" md-fixed :md-active.sync="showRightSidepanel">
+            <md-toolbar :md-elevation="1">
+                <span class="md-title">News Categories</span>
+            </md-toolbar>
 
-        <md-progress-bar v-if="loading" md-mode='indeterminate'></md-progress-bar>
+            <md-progress-bar v-if="loading" md-mode='indeterminate'></md-progress-bar>
 
-        <md-list>
-            <md-subheader class="md-primary">Categories</md-subheader>
+            <md-list>
+                <md-subheader class="md-primary">Categories</md-subheader>
 
-            <md-list-item v-for="(newsCategory, i) in newsCategories" :key="i" @click="loadCategory(newsCategory.path)">
-                <md-icon :class="newsCategory.path === category ? 'md-primary' : ''">{{newsCategory.icon}}</md-icon>
-                <span class="md-list-item-text">{{ newsCategory.name }}</span>
-            </md-list-item>
-        </md-list>
-    </md-drawer>
+                <md-list-item v-for="(newsCategory, i) in newsCategories" :key="i" @click="loadCategory(newsCategory.path)">
+                    <md-icon :class="newsCategory.path === category ? 'md-primary' : ''">{{newsCategory.icon}}</md-icon>
+                    <span class="md-list-item-text">{{ newsCategory.name }}</span>
+                </md-list-item>
+            </md-list>
+        </md-drawer>
 
         <!-- App Content -->
         <div class="md-layout-item md-size-95">
@@ -103,7 +122,7 @@
         async fetch ({ store }) {
             await store.dispatch(
                 "loadHeadlines",
-                `/api/top-headlines?country=us&category=${store.state.category}`
+                `/api/top-headlines?country=${store.state.country}&category=${store.state.category}`
             )
         },
 
@@ -118,6 +137,10 @@
 
             loading () {
                 return this.$store.getters.loading;
+            },
+
+            country () {
+                return this.$store.getters.country;
             }
         },
 
@@ -126,8 +149,12 @@
                 this.$store.commit("setCategory", category);
                 this.$store.dispatch(
                     "loadHeadlines",
-                    `/api/top-headlines?country=us&category=${this.category}`
+                    `/api/top-headlines?country=${this.country}&category=${this.category}`
                 )
+            },
+
+            changeCountry (country) {
+                this.$store.commit('setCountry', country);
             }
         }
     }
