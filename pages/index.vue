@@ -126,6 +126,15 @@
             )
         },
 
+        watch: {
+            async country () {
+                await this.$store.dispatch(
+                    "loadHeadlines",
+                    `/api/top-headlines?country=${this.country}&category=${this.category}`
+                )
+            }
+        },
+
         computed: {
             headlines () {
                 return this.$store.getters.headlines;
