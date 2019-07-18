@@ -21,12 +21,14 @@
             <span class="md-title">News Categories</span>
         </md-toolbar>
 
+        <md-progress-bar v-if="loading" md-mode='indeterminate'></md-progress-bar>
+
         <md-list>
             <md-subheader class="md-primary">Categories</md-subheader>
 
             <md-list-item v-for="(newsCategory, i) in newsCategories" :key="i" @click="loadCategory(newsCategory.path)">
-                <md-icon>{{newsCategory.icon}}</md-icon>
-                <span class="md-list-item-text">{{newsCategory.name}}</span>
+                <md-icon :class="newsCategory.path === category ? 'md-primary' : ''">{{newsCategory.icon}}</md-icon>
+                <span class="md-list-item-text">{{ newsCategory.name }}</span>
             </md-list-item>
         </md-list>
     </md-drawer>
@@ -101,7 +103,7 @@
         async fetch ({ store }) {
             await store.dispatch(
                 "loadHeadlines",
-                `/api/top-headlines?country=us`
+                `/api/top-headlines?country=us&category=${store.state.category}`
             )
         },
 
@@ -112,13 +114,20 @@
 
             category () {
                 return this.$store.getters.category;
+            },
+
+            loading () {
+                return this.$store.getters.loading;
             }
         },
 
         methods: {
             async loadCategory (category) {
                 this.$store.commit("setCategory", category);
-                
+                this.$store.dispatch(
+                    "loadHeadlines",
+                    `/api/top-headlines?country=us&category=${this.category}`
+                )
             }
         }
     }

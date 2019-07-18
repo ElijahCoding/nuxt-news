@@ -40,6 +40,7 @@ const createStore = () => {
             headlines: state => state.headlines,
             loading: state => state.loading,
             category: state => state.category,
+            loading: state => state.loading
         },
     })
 }
