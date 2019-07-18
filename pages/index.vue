@@ -160,10 +160,12 @@
                     "loadHeadlines",
                     `/api/top-headlines?country=${this.country}&category=${this.category}`
                 )
+                this.showRightSidepanel = false;
             },
 
             changeCountry (country) {
                 this.$store.commit('setCountry', country);
+                this.showLeftSidepanel = false;
             }
         }
     }
