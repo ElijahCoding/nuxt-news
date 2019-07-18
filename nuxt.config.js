@@ -58,7 +58,7 @@ export default {
       },
 
       "/register/": {
-          target: "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=[AIzaSyD_qByK8iAxoqOQG97QhY-e0bML66DwFtg]",
+          target: "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyD_qByK8iAxoqOQG97QhY-e0bML66DwFtg",
           pathRewrite: { "^/register/": "" }
       }
   },

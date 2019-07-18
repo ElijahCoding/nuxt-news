@@ -33,6 +33,21 @@ const createStore = () => {
                 const { articles } = await this.$axios.$get(apiUrl);
                 commit('setLoading', false);
                 commit("setHeadlines", articles);
+            },
+
+            async authenticateUser ({ commit }, userPayload) {
+                try {
+                    commit('setLoading', true);
+                    const authUserData = await this.$axios.$post(
+                        "/register/",
+                        userPayload
+                    );
+                    console.log(authUserData);
+                    commit('setLoading', false);
+                } catch (e) {
+                    console.error(e);
+                    commit('setLoading', true);
+                }
             }
         },
 

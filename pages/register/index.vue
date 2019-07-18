@@ -6,16 +6,16 @@
       </md-card-header>
 
       <!-- Register Form -->
-      <form>
+      <form @submit.prevent="registerUser">
         <md-card-content>
           <md-field md-clearable>
             <label for="email">Email</label>
-            <md-input type="email" name="email" id="email" autocomplete="email" />
+            <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" />
           </md-field>
 
           <md-field>
             <label for="password">Password</label>
-            <md-input type="password" name="password" id="password" autocomplete="password" />
+            <md-input type="password" name="password" id="password" autocomplete="password" v-model="form.password" />
           </md-field>
         </md-card-content>
 
@@ -30,6 +30,23 @@
 
 <script>
     export default {
+        data () {
+            return {
+                form: {
+                    email: '',
+                    password: ''
+                }
+            }
+        },
 
+        methods: {
+            async registerUser () {
+                await this.$store.dispatch('authenticateUser', {
+                    email: this.form.email,
+                    password: this.form.password,
+                    returnSecureToken: true
+                });
+            }
+        }
     }
 </script>
