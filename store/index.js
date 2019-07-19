@@ -6,7 +6,8 @@ const createStore = () => {
             headlines: [],
             loading: false,
             category: '',
-            country: 'us'
+            country: 'us',
+            token: ''
         },
 
         mutations: {
@@ -22,8 +23,12 @@ const createStore = () => {
                 state.category = category;
             },
 
-            setCountry(state, country) {
+            setCountry (state, country) {
                 state.country = country;
+            },
+
+            setToken (state, token) {
+                state.token = token;
             }
         },
 
@@ -42,7 +47,7 @@ const createStore = () => {
                         "/register/",
                         userPayload
                     );
-                    console.log(authUserData);
+                    commit('setToken', authUserData.idToken);
                     commit('setLoading', false);
                 } catch (e) {
                     console.error(e);
@@ -56,7 +61,8 @@ const createStore = () => {
             loading: state => state.loading,
             category: state => state.category,
             loading: state => state.loading,
-            country: state => state.country
+            country: state => state.country,
+            isAuthenticated: state => !!state.token
         },
     })
 }
