@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import md5 from 'md5';
 import db from '~/plugins/firestore';
+import { saveUserData } from '~/utils';
 
 const createStore = () => {
     return new Vuex.Store({
@@ -75,7 +76,7 @@ const createStore = () => {
                     commit('setUser', user);
                     commit('setToken', authUserData.idToken);
                     commit('setLoading', false);
-
+                    saveUserData(authUserData, user);
                 } catch (e) {
                     console.error(e);
                     commit('setLoading', true);
