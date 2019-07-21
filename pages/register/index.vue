@@ -33,13 +33,32 @@
 </template>
 
 <script>
+    import { validationMixin } from 'vuelidate';
+    import { required, email, minLength, maxLength } from 'vuelidate/lib/validators';
+
     export default {
         middleware: 'auth',
+        mixins: [validationMixin],
+
         data () {
             return {
                 form: {
                     email: '',
                     password: ''
+                }
+            }
+        },
+
+        validations: {
+            form: {
+                email: {
+                    required,
+                    email
+                },
+                password: {
+                    required,
+                    minLength: minLength(6),
+                    maxLength: maxLength(20)
                 }
             }
         },
@@ -63,6 +82,9 @@
         },
 
         methods: {
+            validateForm () {
+                
+            }
             async registerUser () {
                 await this.$store.dispatch('authenticateUser', {
                     email: this.form.email,
