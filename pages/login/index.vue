@@ -91,11 +91,19 @@
                 this.$v.$touch();
 
                 if (!this.$v.$invalid) {
-
+                    this.loginUser();
                 }
             },
 
-            
+            async loginUser () {
+                await this.$store.dispatch('authenticateUser', {
+                    action: 'login',
+                    email: this.form.email,
+                    password: this.form.password,
+                    returnSecureToken: true
+                });
+            },
+
             getValidationClass (fieldName) {
                 const field = this.$v.form[fieldName];
 
