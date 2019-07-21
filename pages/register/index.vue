@@ -6,16 +6,33 @@
       </md-card-header>
 
       <!-- Register Form -->
-      <form @submit.prevent="registerUser">
+      <form @submit.prevent="validateForm">
         <md-card-content>
-          <md-field md-clearable>
+          <md-field md-clearable :class="getValidationClass('email')">
             <label for="email">Email</label>
             <md-input :disabled="loading" type="email" name="email" id="email" autocomplete="email" v-model="form.email" />
+            <span class="md-error" v-if="!$v.form.email.required">
+                Email is required
+            </span>
+            <span class="md-error" v-else-if="!$v.form.email.email">
+                Invalid email
+            </span>
           </md-field>
 
-          <md-field>
+          <md-field :class="getValidationClass('password')">
             <label for="password">Password</label>
             <md-input :disabled="loading" type="password" name="password" id="password" autocomplete="password" v-model="form.password" />
+            <span class="md-error" v-if="!$v.form.password.required">
+                Password is required
+            </span>
+
+            <span class="md-error" v-else-if="!$v.form.password.minLength">
+                Password too short
+            </span>
+
+            <span class="md-error" v-else-if="!$v.form.password.maxLength">
+                Password too long
+            </span>
           </md-field>
         </md-card-content>
 
@@ -83,14 +100,29 @@
 
         methods: {
             validateForm () {
-                
-            }
+                this.$v.$touch();
+
+                if (!this.$v.$invalid) {
+                    this.registerUser();
+                }
+            },
+
             async registerUser () {
                 await this.$store.dispatch('authenticateUser', {
                     email: this.form.email,
                     password: this.form.password,
                     returnSecureToken: true
                 });
+            },
+
+            getValidationClass (fieldName) {
+                const field = this.$v.form[fieldName];
+
+                if (field) {
+                    return {
+                        "md-invalid": field.$invalid && field.$dirty
+                    }
+                }
             }
         }
     }
