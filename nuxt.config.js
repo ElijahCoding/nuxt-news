@@ -1,6 +1,11 @@
 
 export default {
   mode: 'spa',
+
+  router: {
+      middleware: 'check-auth'
+  },
+
   /*
   ** Headers of the page
   */
