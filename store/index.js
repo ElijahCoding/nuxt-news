@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 import md5 from 'md5';
 import db from '~/plugins/firestore';
-import { saveUserData } from '~/utils';
+import { saveUserData, clearUserData } from '~/utils';
 
 const createStore = () => {
     return new Vuex.Store({
@@ -37,6 +37,14 @@ const createStore = () => {
 
             setUser (state, user) {
                 state.user = user;
+            },
+
+            clearToken (state) {
+                state.token = '';
+            },
+
+            clearUser (state) {
+                state.user = null;
             }
         },
 
@@ -81,6 +89,16 @@ const createStore = () => {
                     console.error(e);
                     commit('setLoading', true);
                 }
+            },
+
+            setLogoutTimer ({ dispatch }, interval) {
+                setTimeout(() => dispatch("logoutUser"), interval);
+            },
+
+            logoutUser({ commit }) {
+                commit("clearToken");
+                commit("clearUser");
+                clearUserData();
             }
         },
 

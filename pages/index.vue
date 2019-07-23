@@ -14,7 +14,7 @@
                         <md-avatar><img :src='user.avatar' :alt="user.email" /></md-avatar>
                         {{ user.email }}
                     </md-button>
-                    <md-button>Logout</md-button>
+                    <md-button @click="logoutUser">Logout</md-button>
                     <md-button class="md-accent" @click="showRightSidepanel = true">Categories</md-button>
                 </template>
                 <template v-else>
@@ -183,6 +183,10 @@
             changeCountry (country) {
                 this.$store.commit('setCountry', country);
                 this.showLeftSidepanel = false;
+            },
+
+            logoutUser () {
+                this.$store.dispatch('logoutUser');
             }
         }
     }
